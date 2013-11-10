@@ -1,3 +1,3 @@
 pubip
 =====
-Obten la IP pública de tu conexión a internet
+Get public IP of your internet conection.

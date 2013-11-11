@@ -2,15 +2,17 @@
 
 from __future__ import print_function
 
-from dbupload import DropboxConnection
-from getpass import getpass
-
-import sys,os,json,datetime
+import os,json,datetime,argparse
 from urllib2 import urlopen
+
+parser = argparse.ArgumentParser(description="Get your public IP")
+parser.add_argument("-l","--log",help="folder for log IP changes")
+parser.add_argument("-u","--upload",help="upload file to Dropbox",action='store_true')
+args = parser.parse_args()
 
 
 fnom='pubip.txt'
-fhis='pubip.his'
+fhis='pubip.log'
 email = 'sersope@gmail.com'
 password = '#######'
 
@@ -19,18 +21,17 @@ urls=[ ['http://www.telize.com/jsonip','ip'],
        ['http://httpbin.org/ip','origin'],
        ['http://jsonip.com','ip'] ]
 
-#Get destination folder from command line
+#Get log folder from command line
 df=os.getcwd()
-if len(sys.argv) > 1 :
-    df=sys.argv[1]
+if args.log!=None :
+    df=args.log
+    try:
+        os.chdir(df)
+    except:
+        print('Error:',df,"don't exist.")
+        exit()
 
-#Set working folder
-try:
-    os.chdir(df)
-except:
-    print('Error:',df,"no existe.")
-    exit()
-
+##TODO obtener la current ip de la ultima linea del fichero log
 #Comprueba si existe fichero
 try:
     f=open(fnom)
@@ -49,25 +50,30 @@ for url in urls:
         continue
     else:
         break
-    
 if nip==None:
-    print('Error: No se pudo obtener la IP.')
+    print('Error: can't get your IP.')
     exit()
+
+if args.log==None and args.upload==False:
+    print('Your public IP is',nip)
     
 #Salva la IP solo si es nueva
-if nip!=cip :
-    f=open(fnom,'w')
-    f.write(nip)
-    f.close()
-    #Actualiza el historico
-    f=open(fhis,'a')
-    f.write(str(datetime.datetime.now())+' IP: '+nip+'\n')
-    f.close()
-    #Sube a Dropbox
-    try:
-        conn = DropboxConnection(email, password).upload_file(fnom,"/",fnom)
-    except:
-        print("Error: Dropbox upload failed")
+if args.log!=None:
+    if nip!=cip :
+        f=open(fnom,'w')
+        f.write(nip)
+        f.close()
+        #Actualiza el historico
+        f=open(fhis,'a')
+        f.write(str(datetime.datetime.now())+' IP:'+nip+'\n')
+        f.close()
+        #Sube a Dropbox
+        if args.upload==True:
+            try:
+                from dbupload import DropboxConnection
+		conn = DropboxConnection(email, password).upload_file(fnom,"/",fnom)
+            except:
+                print("Error: Dropbox upload failed")
 
 
 

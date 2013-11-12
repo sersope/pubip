@@ -21,7 +21,7 @@ urls=[ ['http://www.telize.com/jsonip','ip'],
        ['http://httpbin.org/ip','origin'],
        ['http://jsonip.com','ip'] ]
 
-#Get log folder from command line
+#Obtener carpeta de log de la linea de ordenes
 df=os.getcwd()
 if args.log!=None :
     df=args.log

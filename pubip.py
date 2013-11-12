@@ -32,6 +32,7 @@ if args.log!=None :
         exit()
 
 ##TODO obtener la current ip de la ultima linea del fichero log
+##TODO mensajes por defecto de argsparse en cualquier idioma
 #Comprueba si existe fichero
 try:
     f=open(fnom)

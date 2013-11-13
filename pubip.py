@@ -6,7 +6,7 @@ import os,json,datetime,argparse
 from urllib2 import urlopen
 
 parser = argparse.ArgumentParser(description="Get your public IP")
-parser.add_argument("-l","--log",help="folder for log IP changes")
+parser.add_argument("-l","--log",help="file for log IP changes")
 parser.add_argument("-u","--upload",help="upload file to Dropbox",action='store_true')
 args = parser.parse_args()
 

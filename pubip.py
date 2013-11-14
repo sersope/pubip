@@ -1,41 +1,19 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+#
 #  pubip.py
-#  
+#
 #  Obtener la IP pública de tu conexión a Internet
-#  
-#  Copyright 2013 Sergio Soriano Peiró <sersope@gmail.com>
-#  
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#  
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#  
-#  You should have received a copy of the GNU General Public License
-#  along with this program; if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
-#  MA 02110-1301, USA.
-#  
-#  
+#
 
-#~ from __future__ import print_function #python2
+from __future__ import print_function
 
 import os,json,datetime,argparse
-from urllib.request import urlopen
-#~ from urllib2 import urlopen #python2
+from urllib2 import urlopen
 
 parser = argparse.ArgumentParser(description="Get your public IP")
 parser.add_argument("-l","--log",help="file for log IP changes")
-#~ parser.add_argument("-u","--upload",help="upload file to Dropbox",action='store_true')
 args = parser.parse_args()
-
-email = 'sersope@gmail.com'
-password = '#######'
-
 
 urls=[ ['http://www.telize.com/jsonip','ip'],
        ['http://httpbin.org/ip','origin'],
@@ -65,7 +43,7 @@ if nip==None:
     print("Error: can't get your IP.")
     exit()
 
-if args.log==None: #and args.upload==False:
+if args.log==None:
     print('Your public IP is',nip)
 
 #Registra la IP en el log sólo si es nueva
@@ -75,12 +53,5 @@ if args.log!=None and nip!=cip :
         f=open(args.log,'a')
         f.write(hoy + ' IP:' + nip + '\n')
         f.close()
-        #Sube a Dropbox TODO
-        #~ if args.upload==True:
-            #~ try:
-                #~ from dbupload import DropboxConnection
-                #~ conn = DropboxConnection(email, password).upload_file(fnom,"/",fnom)
-            #~ except:
-                #~ print("Error: Dropbox upload failed")
     except:
         print("Error: Can't save to",args.log)
